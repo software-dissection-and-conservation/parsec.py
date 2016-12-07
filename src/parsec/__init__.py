@@ -268,9 +268,9 @@ class Parser(object):
         return self.ends_with(other)
 
 
-def parse(p, text, index):
+def parse(p, text):
     '''Parse a string and return the result or raise a ParseError.'''
-    return p.parse(text, index)
+    return p.parse(text)
 
 
 def bind(p, fn):
