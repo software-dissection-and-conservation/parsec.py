@@ -14,144 +14,144 @@ import unittest
 
 from parsec import *
 
-class TommyTest(unittest.TestCase):
+class ParsecSpecificationTest(unittest.TestCase):
     """Test the specification of parsec.py"""
-    def test_sepBy(_):
+    def test_sepBy(self):
         parser = sepBy(string("x"), string(","))
-        _.assertEqual(parser.parse("x"), ["x"])
-        _.assertEqual(parser.parse("x,"), ["x"])
-        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
-        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
-        _.assertEqual(parser.parse("") , [])
-        _.assertEqual(parser.parse("1"), [])
-        _.assertEqual(parser.parse("1,"), [])
+        self.assertEqual(parser.parse("x"), ["x"])
+        self.assertEqual(parser.parse("x,"), ["x"])
+        self.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        self.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        self.assertEqual(parser.parse("") , [])
+        self.assertEqual(parser.parse("1"), [])
+        self.assertEqual(parser.parse("1,"), [])
 
-    def test_sepBy1(_):
+    def test_sepBy1(self):
         parser = sepBy1(string("x"), string(","))
-        _.assertEqual(parser.parse("x"), ["x"])
-        _.assertEqual(parser.parse("x,"), ["x"])
-        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
-        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
-        _.assertRaises(ParseError, parser.parse, "" )
-        _.assertRaises(ParseError, parser.parse, "1")
-        _.assertRaises(ParseError, parser.parse, "1,")
+        self.assertEqual(parser.parse("x"), ["x"])
+        self.assertEqual(parser.parse("x,"), ["x"])
+        self.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        self.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        self.assertRaises(ParseError, parser.parse, "" )
+        self.assertRaises(ParseError, parser.parse, "1")
+        self.assertRaises(ParseError, parser.parse, "1,")
 
-    def test_sepEndBy(_):
+    def test_sepEndBy(self):
         parser = sepEndBy(string("x"), string(","))
-        _.assertEqual(parser.parse("x"), ["x"])
-        _.assertEqual(parser.parse("x,"), ["x"])
-        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
-        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
-        _.assertEqual(parser.parse("") , [])
-        _.assertEqual(parser.parse("1"), [])
-        _.assertEqual(parser.parse("1,"), [])
+        self.assertEqual(parser.parse("x"), ["x"])
+        self.assertEqual(parser.parse("x,"), ["x"])
+        self.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        self.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        self.assertEqual(parser.parse("") , [])
+        self.assertEqual(parser.parse("1"), [])
+        self.assertEqual(parser.parse("1,"), [])
 
-    def test_sepEndBy1(_):
+    def test_sepEndBy1(self):
         parser = sepEndBy1(letter(), string(","))
-        _.assertEqual(parser.parse("x"), ["x"])
-        _.assertEqual(parser.parse("x,"), ["x"])
-        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
-        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
-        _.assertRaises(ParseError, parser.parse, "" )
-        _.assertRaises(ParseError, parser.parse, "1")
-        _.assertRaises(ParseError, parser.parse, "1,")
+        self.assertEqual(parser.parse("x"), ["x"])
+        self.assertEqual(parser.parse("x,"), ["x"])
+        self.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        self.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        self.assertRaises(ParseError, parser.parse, "" )
+        self.assertRaises(ParseError, parser.parse, "1")
+        self.assertRaises(ParseError, parser.parse, "1,")
 
-    def test_separated(_):
+    def test_separated(self):
         parser = separated(string("x"), string(","), 2, 5)
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertEqual(parser.parse("x,x"), ["x"]*2)
-        _.assertEqual(parser.parse("x,x,"), ["x"]*2)
-        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
-        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
-        _.assertEqual(parser.parse("x,x,x,x"), ["x"]*4)
-        _.assertEqual(parser.parse("x,x,x,x,"), ["x"]*4)
-        _.assertEqual(parser.parse("x,x,x,x,x"), ["x"]*5)
-        _.assertEqual(parser.parse("x,x,x,x,x,"), ["x"]*5)
-        _.assertEqual(parser.parse("x,x,x,x,x,x"), ["x"]*5) # one x remains to be consumed
-        _.assertEqual(parser.parse("x,x,x,x,x,x,"), ["x"]*5) # one x remains to be consumed
-        _.assertRaises(ParseError, parser.parse_strict, "x,x,x,x,x,x" )
-        _.assertRaises(ParseError, parser.parse_strict, "x,x,x,x,x,x," )
-        _.assertRaises(ParseError, parser.parse, "" )
-        _.assertRaises(ParseError, parser.parse, "1")
-        _.assertRaises(ParseError, parser.parse, "1,")
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertEqual(parser.parse("x,x"), ["x"]*2)
+        self.assertEqual(parser.parse("x,x,"), ["x"]*2)
+        self.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        self.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        self.assertEqual(parser.parse("x,x,x,x"), ["x"]*4)
+        self.assertEqual(parser.parse("x,x,x,x,"), ["x"]*4)
+        self.assertEqual(parser.parse("x,x,x,x,x"), ["x"]*5)
+        self.assertEqual(parser.parse("x,x,x,x,x,"), ["x"]*5)
+        self.assertEqual(parser.parse("x,x,x,x,x,x"), ["x"]*5) # one x remains to be consumed
+        self.assertEqual(parser.parse("x,x,x,x,x,x,"), ["x"]*5) # one x remains to be consumed
+        self.assertRaises(ParseError, parser.parse_strict, "x,x,x,x,x,x" )
+        self.assertRaises(ParseError, parser.parse_strict, "x,x,x,x,x,x," )
+        self.assertRaises(ParseError, parser.parse, "" )
+        self.assertRaises(ParseError, parser.parse, "1")
+        self.assertRaises(ParseError, parser.parse, "1,")
 
-    def test_skip(_):
+    def test_skip(self):
         parser = skip(string("x"), string("y"))
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertRaises(ParseError, parser.parse, "y")
-        _.assertRaises(ParseError, parser.parse, "xx")
-        _.assertRaises(ParseError, parser.parse, "yy")
-        _.assertEqual(parser.parse("xy"), "x")
-        _.assertRaises(ParseError, parser.parse_strict, "xyz")
-        _.assertEqual(parser.parse("xyz"), "x") # z remains to be consumed
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertRaises(ParseError, parser.parse, "y")
+        self.assertRaises(ParseError, parser.parse, "xx")
+        self.assertRaises(ParseError, parser.parse, "yy")
+        self.assertEqual(parser.parse("xy"), "x")
+        self.assertRaises(ParseError, parser.parse_strict, "xyz")
+        self.assertEqual(parser.parse("xyz"), "x") # z remains to be consumed
 
-    def test_skip_operator(_):
+    def test_skip_operator(self):
         parser = string("x") << string("y")
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertRaises(ParseError, parser.parse, "y")
-        _.assertRaises(ParseError, parser.parse, "xx")
-        _.assertRaises(ParseError, parser.parse, "yy")
-        _.assertEqual(parser.parse("xy"), "x")
-        _.assertRaises(ParseError, parser.parse_strict, "xyz")
-        _.assertEqual(parser.parse("xyz"), "x") # z remains to be consumed
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertRaises(ParseError, parser.parse, "y")
+        self.assertRaises(ParseError, parser.parse, "xx")
+        self.assertRaises(ParseError, parser.parse, "yy")
+        self.assertEqual(parser.parse("xy"), "x")
+        self.assertRaises(ParseError, parser.parse_strict, "xyz")
+        self.assertEqual(parser.parse("xyz"), "x") # z remains to be consumed
 
-    def test_space(_):
+    def test_space(self):
         parser = space()
-        _.assertEqual(parser.parse(" "), " ")
-        _.assertEqual(parser.parse("  "), " ") # one space left to be consumed
-        _.assertRaises(ParseError, parser.parse, "")
-        _.assertRaises(ParseError, parser.parse, "x ")
+        self.assertEqual(parser.parse(" "), " ")
+        self.assertEqual(parser.parse("  "), " ") # one space left to be consumed
+        self.assertRaises(ParseError, parser.parse, "")
+        self.assertRaises(ParseError, parser.parse, "x ")
 
-    def test_spaces(_):
+    def test_spaces(self):
         parser = spaces()
-        _.assertEqual(parser.parse(""), [])
-        _.assertEqual(parser.parse(" "), [" "])
-        _.assertEqual(parser.parse("  "), [" "]*2)
-        _.assertEqual(parser.parse("c . . ."), [])
+        self.assertEqual(parser.parse(""), [])
+        self.assertEqual(parser.parse(" "), [" "])
+        self.assertEqual(parser.parse("  "), [" "]*2)
+        self.assertEqual(parser.parse("c . . ."), [])
 
-    def test_string(_):
+    def test_string(self):
         parser = string("x")
-        _.assertRaises(ParseError, parser.parse, "")
-        _.assertEqual(parser.parse("x"), "x")
-        _.assertEqual(parser.parse("xy"), "x") # y remains to be consumed
-        _.assertRaises(ParseError, parser.parse, " xxx")
+        self.assertRaises(ParseError, parser.parse, "")
+        self.assertEqual(parser.parse("x"), "x")
+        self.assertEqual(parser.parse("xy"), "x") # y remains to be consumed
+        self.assertRaises(ParseError, parser.parse, " xxx")
 
-    def test_times(_):
+    def test_times(self):
         parser = times(string("x"), 3, 5)
-        _.assertRaises(ParseError, parser.parse, "")
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertRaises(ParseError, parser.parse, "xx")
-        _.assertEqual(parser.parse("xxx"), ["x"]*3)
-        _.assertEqual(parser.parse("xxxx"), ["x"]*4)
-        _.assertEqual(parser.parse("xxxxx"), ["x"]*5)
-        _.assertEqual(parser.parse("xxxxxx"), ["x"]*5) # one x remains to be consumed
-        _.assertRaises(ParseError, parser.parse_strict, "xxxxxx")
-        _.assertRaises(ParseError, parser.parse_strict, "xxxxxxx")
+        self.assertRaises(ParseError, parser.parse, "")
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertRaises(ParseError, parser.parse, "xx")
+        self.assertEqual(parser.parse("xxx"), ["x"]*3)
+        self.assertEqual(parser.parse("xxxx"), ["x"]*4)
+        self.assertEqual(parser.parse("xxxxx"), ["x"]*5)
+        self.assertEqual(parser.parse("xxxxxx"), ["x"]*5) # one x remains to be consumed
+        self.assertRaises(ParseError, parser.parse_strict, "xxxxxx")
+        self.assertRaises(ParseError, parser.parse_strict, "xxxxxxx")
 
-    def test_try_choice(_):
+    def test_try_choice(self):
         parser = try_choice(string("-x"), string("-y"))
-        _.assertRaises(ParseError, parser.parse, "")
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertRaises(ParseError, parser.parse, "y")
-        _.assertEqual(parser.parse("-x"), "-x")
-        _.assertEqual(parser.parse("-y"), "-y")
-        _.assertEqual(parser.parse("-xy"), "-x") # y remains to be consumed
-        _.assertRaises(ParseError, parser.parse, "-z")
-        _.assertRaises(ParseError, parser.parse, "abc")
+        self.assertRaises(ParseError, parser.parse, "")
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertRaises(ParseError, parser.parse, "y")
+        self.assertEqual(parser.parse("-x"), "-x")
+        self.assertEqual(parser.parse("-y"), "-y")
+        self.assertEqual(parser.parse("-xy"), "-x") # y remains to be consumed
+        self.assertRaises(ParseError, parser.parse, "-z")
+        self.assertRaises(ParseError, parser.parse, "abc")
 
-    def test_try_choice_operator(_):
+    def test_try_choice_operator(self):
         parser = string("-x") ^ string("-y")
-        _.assertRaises(ParseError, parser.parse, "")
-        _.assertRaises(ParseError, parser.parse, "x")
-        _.assertRaises(ParseError, parser.parse, "y")
-        _.assertEqual(parser.parse("-x"), "-x")
-        _.assertEqual(parser.parse("-y"), "-y")
-        _.assertEqual(parser.parse("-xy"), "-x") # y remains to be consumed
-        _.assertRaises(ParseError, parser.parse, "-z")
-        _.assertRaises(ParseError, parser.parse, "abc")
+        self.assertRaises(ParseError, parser.parse, "")
+        self.assertRaises(ParseError, parser.parse, "x")
+        self.assertRaises(ParseError, parser.parse, "y")
+        self.assertEqual(parser.parse("-x"), "-x")
+        self.assertEqual(parser.parse("-y"), "-y")
+        self.assertEqual(parser.parse("-xy"), "-x") # y remains to be consumed
+        self.assertRaises(ParseError, parser.parse, "-z")
+        self.assertRaises(ParseError, parser.parse, "abc")
 
-    def test_generate(_):
+    def test_generate(self):
         nonlocals = {"[": None, "]": None}
         @generate
         def array_of_xs():
@@ -160,16 +160,21 @@ class TommyTest(unittest.TestCase):
             nonlocals["]"] = yield string("]")
             return array_elements
 
-        _.assertEqual(nonlocals["["], None)
-        _.assertEqual(nonlocals["]"], None)
-        _.assertEqual(array_of_xs.parse("[x, x, x,x, x]"), ["x"]*5)
-        _.assertEqual(nonlocals["["], "[")
-        _.assertEqual(nonlocals["]"], "]")
+        self.assertEqual(nonlocals["["], None)
+        self.assertEqual(nonlocals["]"], None)
+        self.assertEqual(array_of_xs.parse("[x, x, x,x, x]"), ["x"]*5)
+        self.assertEqual(nonlocals["["], "[")
+        self.assertEqual(nonlocals["]"], "]")
 
+    def test_letter_parser(self):
+        parser = letter()
+        for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
+            self.assertEqual(parser.parse(c), c)
+        for c in "0123456789+-.,;:?^*":
+            self.assertRaises(ParseError, parser.parse, c)
 
-
-class DanielTest(unittest.TestCase):
-    """Test the implementation of Text.Parsec.Char."""
+        self.assertEqual(parser.parse("xyz1"), "x")
+        self.assertRaises(ParseError, parser.parse, "42")
 
     def test_letter(self):
         parser = letter()
@@ -236,6 +241,7 @@ class DanielTest(unittest.TestCase):
         self.assertEqual(parse(letter(), "x"), "x")
         self.assertEqual(parse(digit(), "1"), "1")
         self.assertRaises(ParseError, lambda : parse(letter(), "42"))
+        self.assertRaises(ParseError, lambda : parse(letter(), "42"))
 
     def test_parse_partial(self):
         self.assertEqual(letter().parse_partial("x_rest"), ("x", "_rest"))
@@ -270,28 +276,6 @@ class DanielTest(unittest.TestCase):
         self.assertRaises(ParseError, parser.parse, "2")
 
 
-
-
-
-
-class ParsecSpecificationTest(unittest.TestCase):
-    """Test the specification of parsec.py"""
-    def test_times_with_then(_):
-        parser = times(letter(), 3) >> digit()
-        _.assertEqual(parser.parse("xyz1"), "1")
-        _.assertRaises(ParseError, parser.parse, "xy1")
-        _.assertRaises(ParseError, parser.parse, "xyz")
-        _.assertRaises(ParseError, parser.parse, "xyzw")
-
-    def test_letter_parser(_):
-        parser = letter()
-        for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
-            _.assertEqual(parser.parse(c), c)
-        for c in "0123456789+-.,;:?^*":
-            _.assertRaises(ParseError, parser.parse, c)
-
-        _.assertEqual(parser.parse("xyz1"), "x")
-        _.assertRaises(ParseError, parser.parse, "42")
 
 
 if __name__ == "__main__":
