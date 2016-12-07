@@ -117,6 +117,18 @@ class TommyTest(unittest.TestCase):
         _.assertEqual(parser.parse("xy"), "x") # y remains to be consumed
         _.assertRaises(ParseError, parser.parse, " xxx")
 
+    def test_times(_):
+        parser = times(string("x"), 3, 5)
+        _.assertRaises(ParseError, parser.parse, "")
+        _.assertRaises(ParseError, parser.parse, "x")
+        _.assertRaises(ParseError, parser.parse, "xx")
+        _.assertEqual(parser.parse("xxx"), ["x"]*3)
+        _.assertEqual(parser.parse("xxxx"), ["x"]*4)
+        _.assertEqual(parser.parse("xxxxx"), ["x"]*5)
+        _.assertEqual(parser.parse("xxxxxx"), ["x"]*5) # one x remains to be consumed
+        _.assertRaises(ParseError, parser.parse_strict, "xxxxxx")
+        _.assertRaises(ParseError, parser.parse_strict, "xxxxxxx")
+
 class ParsecSpecificationTest(unittest.TestCase):
     '''Test the specification of parsec.py'''
     def test_times_with_then(_):
