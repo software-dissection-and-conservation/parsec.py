@@ -96,6 +96,13 @@ class TommyTest(unittest.TestCase):
         _.assertRaises(ParseError, parser.parse_strict, "xyz")
         _.assertEqual(parser.parse("xyz"), "x") # z remains to be consumed
 
+    def test_space(_):
+        parser = space()
+        _.assertEqual(parser.parse(" "), " ")
+        _.assertEqual(parser.parse("  "), " ") # one space left to be consumed
+        _.assertRaises(ParseError, parser.parse, "")
+        _.assertRaises(ParseError, parser.parse, "x ")
+
 class ParsecSpecificationTest(unittest.TestCase):
     '''Test the specification of parsec.py'''
     def test_times_with_then(_):
