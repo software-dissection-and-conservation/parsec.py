@@ -232,10 +232,10 @@ class DanielTest(unittest.TestCase):
         self.assertEqual(letter().parse("yX"), "y")
         self.assertRaises(ParseError, letter().parse, "2")
 
-    # TODO
-   # def test_parse_operator(self):
-   #     self.assertEqual(parse(letter(), "x", 0), "x")
-
+    def test_parse_fn(self):
+        self.assertEqual(parse(letter(), "x"), "x")
+        self.assertEqual(parse(digit(), "1"), "1")
+        self.assertRaises(ParseError, lambda : parse(letter(), "42"))
 
     def test_parse_partial(self):
         self.assertEqual(letter().parse_partial("x_rest"), ("x", "_rest"))
