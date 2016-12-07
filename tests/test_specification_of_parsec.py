@@ -151,6 +151,21 @@ class TommyTest(unittest.TestCase):
         _.assertRaises(ParseError, parser.parse, "-z")
         _.assertRaises(ParseError, parser.parse, "abc")
 
+    def test_generate(_):
+        nonlocals = {"[": None, "]": None}
+        @generate
+        def array_of_xs():
+            nonlocals["["] = yield string("[")
+            array_elements = yield sepBy(string("x"), spaces() >> string(",") << spaces())
+            nonlocals["]"] = yield string("]")
+            return array_elements
+
+        _.assertEqual(nonlocals["["], None)
+        _.assertEqual(nonlocals["]"], None)
+        _.assertEqual(array_of_xs.parse("[x, x, x,x, x]"), ["x"]*5)
+        _.assertEqual(nonlocals["["], "[")
+        _.assertEqual(nonlocals["]"], "]")
+
 
 
 class DanielTest(unittest.TestCase):
