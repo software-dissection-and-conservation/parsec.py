@@ -36,6 +36,16 @@ class TommyTest(unittest.TestCase):
         _.assertRaises(ParseError, parser.parse, "1")
         _.assertRaises(ParseError, parser.parse, "1,")
 
+    def test_sepEndBy(_):
+        parser = sepEndBy(string("x"), string(","))
+        _.assertEqual(parser.parse("x"), ["x"])
+        _.assertEqual(parser.parse("x,"), ["x"])
+        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        _.assertEqual(parser.parse("") , [])
+        _.assertEqual(parser.parse("1"), [])
+        _.assertEqual(parser.parse("1,"), [])
+
 class ParsecSpecificationTest(unittest.TestCase):
     '''Test the specification of parsec.py'''
     def test_times_with_then(_):
