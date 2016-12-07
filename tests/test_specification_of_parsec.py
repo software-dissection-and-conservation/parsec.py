@@ -56,6 +56,26 @@ class TommyTest(unittest.TestCase):
         _.assertRaises(ParseError, parser.parse, "1")
         _.assertRaises(ParseError, parser.parse, "1,")
 
+    def test_separated(_):
+        parser = separated(string("x"), string(","), 2, 5)
+        _.assertRaises(ParseError, parser.parse, "x")
+        _.assertRaises(ParseError, parser.parse, "x")
+        _.assertEqual(parser.parse("x,x"), ["x"]*2)
+        _.assertEqual(parser.parse("x,x,"), ["x"]*2)
+        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        _.assertEqual(parser.parse("x,x,x,x"), ["x"]*4)
+        _.assertEqual(parser.parse("x,x,x,x,"), ["x"]*4)
+        _.assertEqual(parser.parse("x,x,x,x,x"), ["x"]*5)
+        _.assertEqual(parser.parse("x,x,x,x,x,"), ["x"]*5)
+        _.assertEqual(parser.parse("x,x,x,x,x,x"), ["x"]*5) # one x remains to be consumed
+        _.assertEqual(parser.parse("x,x,x,x,x,x,"), ["x"]*5) # one x remains to be consumed
+        _.assertRaises(ParseError, parser.parse_strict, "x,x,x,x,x,x" )
+        _.assertRaises(ParseError, parser.parse_strict, "x,x,x,x,x,x," )
+        _.assertRaises(ParseError, parser.parse, "" )
+        _.assertRaises(ParseError, parser.parse, "1")
+        _.assertRaises(ParseError, parser.parse, "1,")
+
 class ParsecSpecificationTest(unittest.TestCase):
     '''Test the specification of parsec.py'''
     def test_times_with_then(_):
