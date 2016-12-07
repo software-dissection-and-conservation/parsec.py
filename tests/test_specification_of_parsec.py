@@ -129,6 +129,17 @@ class TommyTest(unittest.TestCase):
         _.assertRaises(ParseError, parser.parse_strict, "xxxxxx")
         _.assertRaises(ParseError, parser.parse_strict, "xxxxxxx")
 
+    def test_try_choice(_):
+        parser = try_choice(string("-x"), string("-y"))
+        _.assertRaises(ParseError, parser.parse, "")
+        _.assertRaises(ParseError, parser.parse, "x")
+        _.assertRaises(ParseError, parser.parse, "y")
+        _.assertEqual(parser.parse("-x"), "-x")
+        _.assertEqual(parser.parse("-y"), "-y")
+        _.assertEqual(parser.parse("-xy"), "-x") # y remains to be consumed
+        _.assertRaises(ParseError, parser.parse, "-z")
+        _.assertRaises(ParseError, parser.parse, "abc")
+
 class ParsecSpecificationTest(unittest.TestCase):
     '''Test the specification of parsec.py'''
     def test_times_with_then(_):
