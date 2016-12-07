@@ -14,6 +14,18 @@ import unittest
 
 from parsec import *
 
+class TommyTest(unittest.TestCase):
+    """Test the specification of parsec.py"""
+    def test_sepBy(_):
+        parser = sepBy(string("x"), string(","))
+        _.assertEqual(parser.parse("x"), ["x"])
+        _.assertEqual(parser.parse("x,"), ["x"])
+        _.assertEqual(parser.parse("x,x,x"), ["x"]*3)
+        _.assertEqual(parser.parse("x,x,x,"), ["x"]*3)
+        _.assertEqual(parser.parse("") , [])
+        _.assertEqual(parser.parse("1"), [])
+        _.assertEqual(parser.parse("1,"), [])
+
 class ParsecSpecificationTest(unittest.TestCase):
     '''Test the specification of parsec.py'''
     def test_times_with_then(_):
