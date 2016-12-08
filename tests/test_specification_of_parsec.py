@@ -128,6 +128,7 @@ class ParsecSpecificationTest(unittest.TestCase):
         self.assertEqual(parser.parse("xxxxxx"), ["x"]*5) # one x remains to be consumed
         self.assertRaises(ParseError, parser.parse_strict, "xxxxxx")
         self.assertRaises(ParseError, parser.parse_strict, "xxxxxxx")
+        self.assertRaises(ParseError, parser.parse_strict, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 
     def test_try_choice(self):
         parser = try_choice(string("-x"), string("-y"))
@@ -166,7 +167,7 @@ class ParsecSpecificationTest(unittest.TestCase):
         self.assertEqual(nonlocals["["], "[")
         self.assertEqual(nonlocals["]"], "]")
 
-    def test_letter_parser(self):
+    def test_letter(self):
         parser = letter()
         for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz":
             self.assertEqual(parser.parse(c), c)
@@ -175,11 +176,6 @@ class ParsecSpecificationTest(unittest.TestCase):
 
         self.assertEqual(parser.parse("xyz1"), "x")
         self.assertRaises(ParseError, parser.parse, "42")
-
-    def test_letter(self):
-        parser = letter()
-        self.assertEqual(parser.parse("A"), "A")
-        self.assertRaises(ParseError, parser.parse, "9")
 
     def test_many(self):
         parser = many(letter())
