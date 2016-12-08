@@ -275,7 +275,68 @@ class ParsecSpecificationTest(unittest.TestCase):
         self.assertEqual(parser.parse("x"), "x")
         self.assertRaises(ParseError, parser.parse, "2")
 
+    def test_digit(self):
+        parser = digit()
+        self.assertEqual(parser.parse("1"), "1")
+        self.assertRaises(ParseError, parser.parse, "a")
 
+    def test_bind(self):
+        cookies = [""]
+        def end_with_b(beforeB):
+            cookies[0] = "".join(beforeB)
+            return string("b")
+
+        parser = many(digit()).bind(end_with_b)
+        self.assertEqual(parser.parse('111b'), 'b')
+        self.assertEqual(cookies[0], "111")
+
+    def test_choice(self):
+        parser1 = digit()
+        parser2 = letter()
+        choice = parser1 | parser2
+        self.assertEqual(choice.parse("A1"), "A")
+        self.assertEqual(choice.parse("1A"), "1")
+        self.assertRaises(ParseError, choice.parse, "!7")
+
+    def test_count(self):
+        parser = count(digit(), 7)
+        self.assertEqual(parser.parse("7777777"), ["7", "7", "7", "7", "7", "7", "7"])
+        self.assertEqual(parser.parse("7777777A"), ["7", "7", "7", "7", "7", "7", "7"])
+        self.assertEqual(parser.parse("123456789"), ["1", "2", "3", "4", "5", "6", "7"])
+        self.assertRaises(ParseError, parser.parse, "123456")
+
+    def test_compose(self):
+        parser = digit() >> letter()
+        self.assertEqual(parser.parse("1A"), "A")
+        self.assertEqual(parser.parse("2AB"), "A")
+        self.assertRaises(ParseError, parser.parse, "12A")
+        self.assertRaises(ParseError, parser.parse, "A1")
+
+    def test_endBy(self):
+        parser = endBy(letter(), digit())
+        self.assertEqual(parser.parse("A1"), ["A"])
+        self.assertEqual(parser.parse("A1B2"), ["A", "B"])
+        self.assertEqual(parser.parse("1A2"), [])
+        self.assertEqual(parser.parse("A1B23"), ["A", "B"])
+        self.assertRaises(ParseError, parser.parse, "A2B")
+
+    def test_endBy1(self):
+        parser = endBy(letter(), digit())
+        self.assertEqual(parser.parse("A1"), ["A"])
+        self.assertEqual(parser.parse("A1B2"), ["A", "B"])
+        self.assertEqual(parser.parse("1A2"), [])
+        self.assertEqual(parser.parse("A1B23"), ["A", "B"])
+        self.assertRaises(ParseError, parser.parse, "A2B")
+
+    def test_ends_with(self):
+        parser = letter() < digit()
+        self.assertEqual(parser.parse("a2"), "a")
+        self.assertRaises(ParseError, parser.parse, "a")
+
+    def test_joint(self):
+        parser = letter() + digit()
+        self.assertEqual(parser.parse("A2"), ("A", "2"))
+        self.assertRaises(ParseError, parser.parse, "a")
 
 
 if __name__ == "__main__":
