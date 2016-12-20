@@ -43,5 +43,10 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(v.name, "grammar")
         self.assertEqual(str(v), "grammar")
 
+    def test_production(self):
+        production = Production([StringValue("def"), NameValue("identifier"), StringValue("\\n"), NameValue("body")])
+        self.assertEqual(production.parts, [StringValue("def"), NameValue("identifier"), StringValue("\\n"), NameValue("body")])
+        self.assertEqual(str(production), "\"def\" identifier \"\\n\" body")
+
 if __name__ == "__main__":
     unittest.main()

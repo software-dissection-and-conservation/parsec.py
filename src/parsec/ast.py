@@ -50,3 +50,9 @@ class Token(Node):
     def __str__(self):
         return "token {0} = {1};".format(self.name, self.value)
 
+class Production(Node):
+    def __init__(self, parts):
+        self.parts = parts
+
+    def __str__(self):
+        return " ".join(map(str, self.parts))
