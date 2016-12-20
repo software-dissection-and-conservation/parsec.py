@@ -209,6 +209,60 @@ class GrammarTest(unittest.TestCase):
         self.assertEqual(p.parse_strict('foo = "bar"\n | \n "baz";'), Rule("foo", [Production([String("bar")]), Production([String("baz")])]))
         self.assertEqual(p.parse_strict(' \n foo \n = \n "bar"\n | \n "baz" \n  ; \n'), Rule("foo", [Production([String("bar")]), Production([String("baz")])]))
 
+    def test_grammar(self):
+        p = grammar
+        self.assertEqual(p.parse_strict("start = foo;"), Grammar([Start("foo")]))
+        self.assertEqual(p.parse_strict('start = foo;\ntoken a = "b";'), Grammar([Start("foo"), Token("a", String("b"))]))
+        self.assertEqual(p.parse_strict('start = foo;\ntoken bar = "baz";\n foo = bar;'), Grammar([ Start("foo")
+                                                                                          , Token("bar", String("baz"))
+                                                                                          , Rule("foo", [Production([Identifier("bar")])])
+                                                                                          ]))
+        self.assertEqual(p.parse_strict('# this is a comment \nstart = foo;\ntoken bar = "baz";\n foo = bar;'), Grammar([ Comment("this is a comment")
+                                                                                                                        , Start("foo")
+                                                                                                                        , Token("bar", String("baz"))
+                                                                                                                        , Rule("foo", [Production([Identifier("bar")])])
+                                                                                                                        ]))
+        test_grammar = """
+# This is a grammar
+
+# Here we define some tokens
+token a = "x";
+token b1 = "x1";
+token b2 = "x2";
+
+# And here come the grammar rules
+foo = a other
+    | _
+    ;
+
+other = b1
+      | b2
+      | "hey!"
+      ;
+
+# Please start at foo
+
+start = foo;
+
+"""
+        print(p.parse(test_grammar))
+        self.assertEqual(p.parse(test_grammar), Grammar([ Comment("This is a grammar")
+                                                        , Comment("Here we define some tokens")
+                                                        , Token("a", String("x"))
+                                                        , Token("b1", String("x1"))
+                                                        , Token("b2", String("x2"))
+                                                        , Comment("And here come the grammar rules")
+                                                        , Rule("foo", [ Production([Identifier("a"), Identifier("other")])
+                                                                      , Production([Identifier("_")])
+                                                                      ])
+                                                        , Rule("other", [ Production([Identifier("b1")])
+                                                                        , Production([Identifier("b2")])
+                                                                        , Production([String("hey!")])
+                                                                        ])
+                                                        , Comment("Please start at foo")
+                                                        , Start("foo")
+                                                        ]))
+
 
 
 if __name__ == "__main__":
