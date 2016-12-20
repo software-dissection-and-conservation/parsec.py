@@ -27,6 +27,11 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(start.start_rule, "root")
         self.assertEqual(str(start), "start = root;")
 
+    def test_token(self):
+        token = Token("while", "while")
+        self.assertEqual(token.name, "while")
+        self.assertEqual(token.value, "while")
+        self.assertEqual(str(token), "token while = \"while\";")
 
 if __name__ == "__main__":
     unittest.main()
