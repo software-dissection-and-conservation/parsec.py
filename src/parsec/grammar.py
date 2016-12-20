@@ -14,3 +14,6 @@ whitespace = many_of(" \n").parsecmap(array_to_string)
 
 def trim(p):
     return whitespace >> p << whitespace
+
+def symbol(s):
+    return trim(string(s))

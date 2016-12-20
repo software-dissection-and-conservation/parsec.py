@@ -64,6 +64,12 @@ class GrammarTest(unittest.TestCase):
             for after in range(10):
                 self.assertEqual(p.parse_strict(" "*before + "x" + " "*after), "x")
 
+    def test_symbol(self):
+        p = symbol("x")
+        for before in range(10):
+            for after in range(10):
+                self.assertEqual(p.parse_strict(" "*before + "x" + " "*after), "x")
+
 
 
 if __name__ == "__main__":
