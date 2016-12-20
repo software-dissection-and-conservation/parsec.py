@@ -22,6 +22,10 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(comment.message, "this is a comment")
         self.assertEqual(str(comment), "# this is a comment")
 
+    def test_start(self):
+        start = Start("root")
+        self.assertEqual(start.start_rule, "root")
+        self.assertEqual(str(start), "start = root;")
 
 
 if __name__ == "__main__":
