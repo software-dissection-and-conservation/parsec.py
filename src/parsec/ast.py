@@ -21,3 +21,14 @@ class Start:
 
     def __repr__(self):
         return "<{0}>".format(self)
+
+class Token:
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    def __str__(self):
+        return "token {0} = \"{1}\";".format(self.name, self.value)
+
+    def __repr__(self):
+        return "<{0}>".format(self)
