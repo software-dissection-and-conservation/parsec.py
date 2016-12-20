@@ -56,3 +56,5 @@ def unpack_tuple(f):
 
 token_value = string_value
 token = ((symbol("token") >> identifier << symbol("=")) + token_value << symbol(";")).parsecmap(unpack_tuple(Token))
+
+production = sepBy(trim(string_value | identifier_value), whitespace)

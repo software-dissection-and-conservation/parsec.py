@@ -179,6 +179,23 @@ class GrammarTest(unittest.TestCase):
         self.assertRaises(ParseError, p.parse, 'token foo = bar;')
         self.assertRaises(ParseError, p.parse, 'token foo = "bar"')
 
+    def test_production(self):
+        p = production
+        self.assertEqual(p.parse_strict('"foo"'), [String("foo")])
+        self.assertEqual(p.parse_strict('    "foo"   '), [String("foo")])
+        self.assertEqual(p.parse_strict('"foo" "bar"'), [String("foo"), String("bar")])
+        self.assertEqual(p.parse_strict('  "foo" \n "bar" \n \n'), [String("foo"), String("bar")])
+        self.assertEqual(p.parse_strict('"foo" "bar" "baz"'), [String("foo"), String("bar"), String("baz")])
+        self.assertEqual(p.parse_strict('foo'), [Identifier("foo")])
+        self.assertEqual(p.parse_strict('foo bar'), [Identifier("foo"), Identifier("bar")])
+        self.assertEqual(p.parse_strict('foo "foo"'), [Identifier("foo"), String("foo")])
+        self.assertEqual(p.parse_strict('foo "bar" baz'), [Identifier("foo"), String("bar"), Identifier("baz")])
+        self.assertEqual(p.parse('foo | bar'), [Identifier("foo")]) # Note: "| bar" remains to be consumed
+        self.assertRaises(ParseError,p.parse_strict, 'foo | bar')
+        self.assertRaises(ParseError,p.parse_strict, '!foo | bar')
+        self.assertRaises(ParseError,p.parse_strict, 'foo bar!')
+        self.assertRaises(ParseError,p.parse_strict, 'foo?')
+
 
 
 if __name__ == "__main__":
