@@ -17,3 +17,6 @@ def trim(p):
 
 def symbol(s):
     return trim(string(s))
+
+process_comment = lambda s: Comment(array_to_string(s).strip())
+comment = (symbol("#") >> many(none_of("\n")) << whitespace).parsecmap(process_comment)

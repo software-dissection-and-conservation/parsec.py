@@ -70,6 +70,15 @@ class GrammarTest(unittest.TestCase):
             for after in range(10):
                 self.assertEqual(p.parse_strict(" "*before + "x" + " "*after), "x")
 
+    def test_comment(self):
+        p = comment
+        self.assertEqual(p.parse("# this is a comment"), Comment("this is a comment"))
+        self.assertEqual(p.parse("# this is a comment    "), Comment("this is a comment"))
+        self.assertEqual(p.parse("   # this is a comment"), Comment("this is a comment"))
+        self.assertEqual(p.parse("   # this is a comment   "), Comment("this is a comment"))
+        self.assertEqual(p.parse_strict("# this is a comment!"), Comment("this is a comment!"))
+        self.assertEqual(p.parse_strict("\n# this is a comment!\n"), Comment("this is a comment!"))
+
 
 
 if __name__ == "__main__":
