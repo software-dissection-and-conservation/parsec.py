@@ -145,6 +145,20 @@ class GrammarTest(unittest.TestCase):
         for s in invalid:
             self.assertRaises(ParseError, p.parse_strict, s)
 
+    def test_token(self):
+        p = token
+        self.assertEqual(p.parse('token foo = "bar";'), Token("foo", StringValue("bar")))
+        self.assertEqual(p.parse('token bar = "foo";'), Token("bar", StringValue("foo")))
+        self.assertEqual(p.parse('token quote = "\\"";'), Token("quote", StringValue("\"")))
+        self.assertEqual(p.parse_strict('token foo = "bar";'), Token("foo", StringValue("bar")))
+        self.assertEqual(p.parse_strict('token foo = \n"bar";'), Token("foo", StringValue("bar")))
+        self.assertEqual(p.parse_strict('  token \nfoo = \n"bar"  ;   '), Token("foo", StringValue("bar")))
+        self.assertRaises(ParseError, p.parse, 'tokens foo = "bar";')
+        self.assertRaises(ParseError, p.parse, 'töken foo = "bar";')
+        self.assertRaises(ParseError, p.parse, 'token foo != "bar";')
+        self.assertRaises(ParseError, p.parse, 'token foo = bar;')
+        self.assertRaises(ParseError, p.parse, 'token foo = "bar"')
+
 
 
 if __name__ == "__main__":

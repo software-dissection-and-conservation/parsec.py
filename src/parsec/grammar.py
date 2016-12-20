@@ -46,3 +46,9 @@ def charseq():
     return string_part() | string_esc()
 
 string_value = (string('"') >> (many(charseq())) << string('"')).parsecmap(lambda s: StringValue(array_to_string(s)))
+
+def unpack_tuple(f):
+    return lambda t: f(t[0], t[1])
+
+token_value = string_value
+token = ((symbol("token") >> identifier << symbol("=")) + token_value << symbol(";")).parsecmap(unpack_tuple(Token))
