@@ -11,3 +11,6 @@ def array_to_string(s):
     return "".join(s)
 
 whitespace = many_of(" \n").parsecmap(array_to_string)
+
+def trim(p):
+    return whitespace >> p << whitespace

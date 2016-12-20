@@ -58,6 +58,12 @@ class GrammarTest(unittest.TestCase):
             self.assertEqual(p.parse("\n"*i), "\n"*i)
         self.assertEqual(p.parse(" \n  \n\n    "), " \n  \n\n    ")
 
+    def test_trim(self):
+        p = trim(string("x"))
+        for before in range(10):
+            for after in range(10):
+                self.assertEqual(p.parse_strict(" "*before + "x" + " "*after), "x")
+
 
 
 if __name__ == "__main__":
