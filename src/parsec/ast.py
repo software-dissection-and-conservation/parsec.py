@@ -14,6 +14,20 @@ class Node:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+class StringValue(Node):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return "\"{0}\"".format(self.value)
+
+class NameValue(Node):
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
 class Comment(Node):
     def __init__(self, message):
         self.message = message
@@ -34,5 +48,5 @@ class Token(Node):
         self.value = value
 
     def __str__(self):
-        return "token {0} = \"{1}\";".format(self.name, self.value)
+        return "token {0} = {1};".format(self.name, self.value)
 

@@ -23,15 +23,25 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(str(comment), "# this is a comment")
 
     def test_start(self):
-        start = Start("root")
-        self.assertEqual(start.start_rule, "root")
+        start = Start(NameValue("root"))
+        self.assertEqual(start.start_rule, NameValue("root"))
         self.assertEqual(str(start), "start = root;")
 
     def test_token(self):
-        token = Token("while", "while")
+        token = Token("while", StringValue("while"))
         self.assertEqual(token.name, "while")
-        self.assertEqual(token.value, "while")
+        self.assertEqual(token.value, StringValue("while"))
         self.assertEqual(str(token), "token while = \"while\";")
+
+    def test_string_value(self):
+        v = StringValue("for")
+        self.assertEqual(v.value, "for")
+        self.assertEqual(str(v), "\"for\"")
+
+    def test_name_value(self):
+        v = NameValue("grammar")
+        self.assertEqual(v.name, "grammar")
+        self.assertEqual(str(v), "grammar")
 
 if __name__ == "__main__":
     unittest.main()
