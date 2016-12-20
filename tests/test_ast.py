@@ -23,8 +23,8 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(str(comment), "# this is a comment")
 
     def test_start(self):
-        start = Start(NameValue("root"))
-        self.assertEqual(start.start_rule, NameValue("root"))
+        start = Start("root")
+        self.assertEqual(start.start_rule, "root")
         self.assertEqual(str(start), "start = root;")
 
     def test_token(self):
@@ -38,20 +38,20 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(v.value, "for")
         self.assertEqual(str(v), "\"for\"")
 
-    def test_name_value(self):
-        v = NameValue("grammar")
+    def test_identifier(self):
+        v = Identifier("grammar")
         self.assertEqual(v.name, "grammar")
         self.assertEqual(str(v), "grammar")
 
     def test_production(self):
-        production = Production([String("def"), NameValue("identifier"), String("\\n"), NameValue("body")])
-        self.assertEqual(production.parts, [String("def"), NameValue("identifier"), String("\\n"), NameValue("body")])
+        production = Production([String("def"), Identifier("identifier"), String("\\n"), Identifier("body")])
+        self.assertEqual(production.parts, [String("def"), Identifier("identifier"), String("\\n"), Identifier("body")])
         self.assertEqual(str(production), "\"def\" identifier \"\\n\" body")
 
     def test_rule(self):
-        rule = Rule("declaration", [Production([String("var"), NameValue("identifier"), String(";")]), Production([String("val"), NameValue("identifier"), String(";")])])
+        rule = Rule("declaration", [Production([String("var"), Identifier("identifier"), String(";")]), Production([String("val"), Identifier("identifier"), String(";")])])
         self.assertEqual(rule.name, "declaration")
-        self.assertEqual(rule.productions, [Production([String("var"), NameValue("identifier"), String(";")]), Production([String("val"), NameValue("identifier"), String(";")])])
+        self.assertEqual(rule.productions, [Production([String("var"), Identifier("identifier"), String(";")]), Production([String("val"), Identifier("identifier"), String(";")])])
         self.assertEqual(str(rule), "declaration = \"var\" identifier \";\" | \"val\" identifier \";\";")
 
 if __name__ == "__main__":

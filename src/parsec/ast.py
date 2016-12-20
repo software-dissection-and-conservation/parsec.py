@@ -21,7 +21,7 @@ class String(Node):
     def __str__(self):
         return "\"{0}\"".format(self.value)
 
-class NameValue(Node):
+class Identifier(Node):
     def __init__(self, name):
         self.name = name
 
