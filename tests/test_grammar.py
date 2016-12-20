@@ -51,6 +51,13 @@ class GrammarTest(unittest.TestCase):
         for s in samples:
             self.assertEqual(array_to_string(list(s)), s)
 
+    def test_whitespace(self):
+        p = whitespace
+        for i in range(10):
+            self.assertEqual(p.parse(" "*i), " "*i)
+            self.assertEqual(p.parse("\n"*i), "\n"*i)
+        self.assertEqual(p.parse(" \n  \n\n    "), " \n  \n\n    ")
+
 
 
 if __name__ == "__main__":
