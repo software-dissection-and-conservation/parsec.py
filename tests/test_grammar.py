@@ -109,6 +109,42 @@ class GrammarTest(unittest.TestCase):
         self.assertRaises(ParseError, p.parse_strict, "start = 123;")
         self.assertRaises(ParseError, p.parse_strict, "start != 123;")
 
+    def test_string_value(self):
+        p = string_value
+        valid = [ "a"
+                , "b"
+                , "c"
+                , "foo"
+                , "_bar"
+                , "_123onetwothree"
+                , "this_is_a_really_long_identifier"
+                , "awesomeness"
+                ]
+        special = { "\\\\" : "\\"
+                  , "\/" : "/"
+                  , "\\\"" : "\""
+                  , "\\b" : "\b"
+                  , "\\f" : "\f"
+                  , "\\n" : "\n"
+                  , "\\r" : "\r"
+                  , "\\t" : "\t"
+                  , "\\\"" : "\""
+                  , "\\\"" : "\""
+                  , "\\uffff" : "\uffff"
+                  , "\\uabcd" : "\uabcd"
+                  , "\\uabcd" : "\uabcd"
+                  }
+        invalid = [ "1337"
+                  , "!!asdf"
+                  , "asdf--asd-f-asd-f"
+                  ]
+        for s in valid:
+            self.assertEqual(p.parse_strict('"{0}"'.format(s)), StringValue(s))
+        for k, v in special.items():
+            self.assertEqual(p.parse_strict('"{0}"'.format(s)), StringValue(s))
+        for s in invalid:
+            self.assertRaises(ParseError, p.parse_strict, s)
+
 
 
 if __name__ == "__main__":
