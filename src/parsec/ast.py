@@ -28,6 +28,14 @@ class Identifier(Node):
     def __str__(self):
         return self.name
 
+class RegularExpression(Node):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return "r\"{0}\"".format(self.value)
+
+
 class Comment(Node):
     def __init__(self, message):
         self.message = message

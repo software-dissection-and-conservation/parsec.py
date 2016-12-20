@@ -38,6 +38,11 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(s.value, "for")
         self.assertEqual(str(s), "\"for\"")
 
+    def test_regular_expression(self):
+        r = RegularExpression("\\d+")
+        self.assertEqual(r.value, "\\d+")
+        self.assertEqual(str(r), "r\"\\d+\"")
+
     def test_identifier(self):
         v = Identifier("grammar")
         self.assertEqual(v.name, "grammar")
