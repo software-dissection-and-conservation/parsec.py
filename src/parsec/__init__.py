@@ -560,6 +560,15 @@ def letter():
             return Value.failure(index, 'a letter')
     return letter_parser
 
+def any_char():
+    '''Parse any character.'''
+    @Parser
+    def any_char_parser(text, index=0):
+        if index < len(text):
+            return Value.success(index + 1, text[index])
+        else:
+            return Value.failure(index, 'any_char ')
+    return any_char_parser
 
 def digit():
     '''Parse a digit character.'''
@@ -595,6 +604,26 @@ def string(s):
             while matched < slen and index + matched < tlen and text[index + matched] == s[matched]:
                 matched = matched + 1
             return Value.failure(index + matched, s)
+    return string_parser
+
+
+
+def caseless_string(s):
+    '''Parser a non case sensitive string.'''
+    @Parser
+    def string_parser(text, index=0):
+        text = text.lower()
+
+        #dont modify the global s ?
+        new_s = s.lower()
+        slen, tlen = len(new_s), len(text)
+        if text[index:index + slen] == new_s:
+            return Value.success(index + slen, new_s)
+        else:
+            matched = 0
+            while matched < slen and index + matched < tlen and text[index + matched] == new_s[matched]:
+                matched = matched + 1
+            return Value.failure(index + matched, new_s)
     return string_parser
 
 
