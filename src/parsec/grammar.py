@@ -58,3 +58,4 @@ token_value = string_value
 token = ((symbol("token") >> identifier << symbol("=")) + token_value << symbol(";")).parsecmap(unpack_tuple(Token))
 
 production = sepBy(trim(string_value | identifier_value), whitespace).parsecmap(Production)
+rule = (identifier + (symbol("=") >> sepBy1(production, trim(one_of("|"))) << symbol(";"))).parsecmap(unpack_tuple(Rule))

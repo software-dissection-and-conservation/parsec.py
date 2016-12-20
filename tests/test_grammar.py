@@ -196,6 +196,19 @@ class GrammarTest(unittest.TestCase):
         self.assertRaises(ParseError,p.parse_strict, 'foo bar!')
         self.assertRaises(ParseError,p.parse_strict, 'foo?')
 
+    def test_rule(self):
+        p = rule
+        self.assertEqual(p.parse_strict('foo = "bar";'), Rule("foo", [Production([String("bar")])]))
+        self.assertEqual(p.parse_strict('foo = bar;'), Rule("foo", [Production([Identifier("bar")])]))
+        self.assertEqual(p.parse_strict('_ = _;'), Rule("_", [Production([Identifier("_")])]))
+        self.assertEqual(p.parse_strict('foo = "bar" "baz";'), Rule("foo", [Production([String("bar"), String("baz")])]))
+        self.assertEqual(p.parse_strict('foo = "bar" baz | x y z | "foo";'), Rule("foo", [Production([String("bar"), Identifier("baz")]), Production([Identifier("x"), Identifier("y"), Identifier("z")]), Production([String("foo")])]))
+        self.assertEqual(p.parse_strict('foo = "bar" | "baz";'), Rule("foo", [Production([String("bar")]), Production([String("baz")])]))
+        self.assertEqual(p.parse_strict('foo = "bar" "baz";'), Rule("foo", [Production([String("bar"), String("baz")])]))
+        self.assertEqual(p.parse_strict('foo1 = "bar"\n | "baz";'), Rule("foo1", [Production([String("bar")]), Production([String("baz")])]))
+        self.assertEqual(p.parse_strict('foo = "bar"\n | \n "baz";'), Rule("foo", [Production([String("bar")]), Production([String("baz")])]))
+        self.assertEqual(p.parse_strict(' \n foo \n = \n "bar"\n | \n "baz" \n  ; \n'), Rule("foo", [Production([String("bar")]), Production([String("baz")])]))
+
 
 
 if __name__ == "__main__":
