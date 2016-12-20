@@ -48,5 +48,11 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(production.parts, [StringValue("def"), NameValue("identifier"), StringValue("\\n"), NameValue("body")])
         self.assertEqual(str(production), "\"def\" identifier \"\\n\" body")
 
+    def test_rule(self):
+        rule = Rule("declaration", [Production([StringValue("var"), NameValue("identifier"), StringValue(";")]), Production([StringValue("val"), NameValue("identifier"), StringValue(";")])])
+        self.assertEqual(rule.name, "declaration")
+        self.assertEqual(rule.productions, [Production([StringValue("var"), NameValue("identifier"), StringValue(";")]), Production([StringValue("val"), NameValue("identifier"), StringValue(";")])])
+        self.assertEqual(str(rule), "declaration = \"var\" identifier \";\" | \"val\" identifier \";\";")
+
 if __name__ == "__main__":
     unittest.main()
