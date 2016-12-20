@@ -56,3 +56,11 @@ class Production(Node):
 
     def __str__(self):
         return " ".join(map(str, self.parts))
+
+class Rule(Node):
+    def __init__(self, name, productions):
+        self.name = name
+        self.productions = productions
+
+    def __str__(self):
+        return "{0} = {1};".format(self.name, " | ".join(map(str,self.productions)))
