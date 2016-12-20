@@ -1,0 +1,9 @@
+# this is a comments
+#token number = \d+
+token plus = "+"
+start = E
+# Grammar
+E = T X
+T = "(" E ")" || num Y
+X = plus E || ""
+Y = "*" T || ""
