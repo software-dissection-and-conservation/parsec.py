@@ -64,3 +64,10 @@ class Rule(Node):
 
     def __str__(self):
         return "{0} = {1};".format(self.name, " | ".join(map(str,self.productions)))
+
+class Grammar(Node):
+    def __init__(self, d):
+        self.d = d
+
+    def __str__(self):
+        return "\n".join(map(str, self.d))

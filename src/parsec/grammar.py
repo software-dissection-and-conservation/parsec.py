@@ -59,3 +59,5 @@ token = ((symbol("token") >> identifier << symbol("=")) + token_value << symbol(
 
 production = sepBy(trim(string_value | identifier_value), whitespace).parsecmap(Production)
 rule = (identifier + (symbol("=") >> sepBy1(production, trim(one_of("|"))) << symbol(";"))).parsecmap(unpack_tuple(Rule))
+
+grammar = many(trim(comment | start | token | rule)).parsecmap(Grammar)
