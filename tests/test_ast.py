@@ -34,9 +34,9 @@ class AbstractSyntaxTreeTest(unittest.TestCase):
         self.assertEqual(str(token), "token while = \"while\";")
 
     def test_string_value(self):
-        v = String("for")
-        self.assertEqual(v.value, "for")
-        self.assertEqual(str(v), "\"for\"")
+        s = String("for")
+        self.assertEqual(s.value, "for")
+        self.assertEqual(str(s), "\"for\"")
 
     def test_identifier(self):
         v = Identifier("grammar")
