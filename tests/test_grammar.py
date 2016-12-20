@@ -99,6 +99,16 @@ class GrammarTest(unittest.TestCase):
         for s in invalid:
             self.assertRaises(ParseError, p.parse_strict, s)
 
+    def test_start(self):
+        p = start
+        self.assertEqual(p.parse_strict("start = E;"), Start("E"))
+        self.assertEqual(p.parse_strict("start = grammar;"), Start("grammar"))
+        self.assertEqual(p.parse_strict("   start   =    main ; "), Start("main"))
+        self.assertEqual(p.parse_strict("start = E;"), Start("E"))
+        self.assertRaises(ParseError, p.parse_strict, "starts = foo;")
+        self.assertRaises(ParseError, p.parse_strict, "start = 123;")
+        self.assertRaises(ParseError, p.parse_strict, "start != 123;")
+
 
 
 if __name__ == "__main__":
