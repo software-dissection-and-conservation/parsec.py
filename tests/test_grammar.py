@@ -79,6 +79,26 @@ class GrammarTest(unittest.TestCase):
         self.assertEqual(p.parse_strict("# this is a comment!"), Comment("this is a comment!"))
         self.assertEqual(p.parse_strict("\n# this is a comment!\n"), Comment("this is a comment!"))
 
+    def test_identifier(self):
+        p = identifier
+        valid = [ "a"
+                , "b"
+                , "c"
+                , "foo"
+                , "_bar"
+                , "_123onetwothree"
+                , "this_is_a_really_long_identifier"
+                , "awesomeness"
+                ]
+        invalid = [ "1337"
+                  , "!!asdf"
+                  , "asdf--asd-f-asd-f"
+                  ]
+        for s in valid:
+            self.assertEqual(p.parse_strict(s), s)
+        for s in invalid:
+            self.assertRaises(ParseError, p.parse_strict, s)
+
 
 
 if __name__ == "__main__":
