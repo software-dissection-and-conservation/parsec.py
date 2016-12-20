@@ -39,6 +39,18 @@ class GrammarTest(unittest.TestCase):
         for s in invalid:
             self.assertEqual(p.parse(s), [])
 
+    def test_array_to_string(self):
+        samples = [ "a"
+                  , "b"
+                  , "c"
+                  , "sdfg"
+                  , "2342"
+                  , "fdkljdfjfdljaskjdfhaohofihoiehfihfsd"
+                  , "With great power, comes...    awesomeness!"
+                  ]
+        for s in samples:
+            self.assertEqual(array_to_string(list(s)), s)
+
 
 
 if __name__ == "__main__":
