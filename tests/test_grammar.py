@@ -99,6 +99,26 @@ class GrammarTest(unittest.TestCase):
         for s in invalid:
             self.assertRaises(ParseError, p.parse_strict, s)
 
+    def test_identifier_value(self):
+        p = identifier_value
+        valid = [ "a"
+                , "b"
+                , "c"
+                , "foo"
+                , "_bar"
+                , "_123onetwothree"
+                , "this_is_a_really_long_identifier"
+                , "awesomeness"
+                ]
+        invalid = [ "1337"
+                  , "!!asdf"
+                  , "asdf--asd-f-asd-f"
+                  ]
+        for s in valid:
+            self.assertEqual(p.parse_strict(s), Identifier(s))
+        for s in invalid:
+            self.assertRaises(ParseError, p.parse_strict, s)
+
     def test_start(self):
         p = start
         self.assertEqual(p.parse_strict("start = E;"), Start("E"))
