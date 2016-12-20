@@ -16,8 +16,11 @@ from parsec.ast import *
 
 class AbstractSyntaxTreeTest(unittest.TestCase):
     """Test the Abstract Syntax Tree"""
-    pass
 
+    def test_comment(self):
+        comment = Comment("this is a comment")
+        self.assertEqual(comment.message, "this is a comment")
+        self.assertEqual(str(comment), "# this is a comment")
 
 
 
