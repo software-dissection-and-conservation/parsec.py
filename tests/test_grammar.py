@@ -139,20 +139,20 @@ class GrammarTest(unittest.TestCase):
                   , "asdf--asd-f-asd-f"
                   ]
         for s in valid:
-            self.assertEqual(p.parse_strict('"{0}"'.format(s)), StringValue(s))
+            self.assertEqual(p.parse_strict('"{0}"'.format(s)), String(s))
         for k, v in special.items():
-            self.assertEqual(p.parse_strict('"{0}"'.format(s)), StringValue(s))
+            self.assertEqual(p.parse_strict('"{0}"'.format(s)), String(s))
         for s in invalid:
             self.assertRaises(ParseError, p.parse_strict, s)
 
     def test_token(self):
         p = token
-        self.assertEqual(p.parse('token foo = "bar";'), Token("foo", StringValue("bar")))
-        self.assertEqual(p.parse('token bar = "foo";'), Token("bar", StringValue("foo")))
-        self.assertEqual(p.parse('token quote = "\\"";'), Token("quote", StringValue("\"")))
-        self.assertEqual(p.parse_strict('token foo = "bar";'), Token("foo", StringValue("bar")))
-        self.assertEqual(p.parse_strict('token foo = \n"bar";'), Token("foo", StringValue("bar")))
-        self.assertEqual(p.parse_strict('  token \nfoo = \n"bar"  ;   '), Token("foo", StringValue("bar")))
+        self.assertEqual(p.parse_strict('token foo = "bar";'), Token("foo", String("bar")))
+        self.assertEqual(p.parse_strict('token bar = "foo";'), Token("bar", String("foo")))
+        self.assertEqual(p.parse_strict('token quote = "\\"";'), Token("quote", String("\"")))
+        self.assertEqual(p.parse_strict('token foo = "bar";'), Token("foo", String("bar")))
+        self.assertEqual(p.parse_strict('token foo = \n"bar";'), Token("foo", String("bar")))
+        self.assertEqual(p.parse_strict('  token \nfoo = \n"bar"  ;   '), Token("foo", String("bar")))
         self.assertRaises(ParseError, p.parse, 'tokens foo = "bar";')
         self.assertRaises(ParseError, p.parse, 'töken foo = "bar";')
         self.assertRaises(ParseError, p.parse, 'token foo != "bar";')

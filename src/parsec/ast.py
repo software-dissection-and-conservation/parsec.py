@@ -14,7 +14,7 @@ class Node:
     def __ne__(self, other):
         return not self.__eq__(other)
 
-class StringValue(Node):
+class String(Node):
     def __init__(self, value):
         self.value = value
 
