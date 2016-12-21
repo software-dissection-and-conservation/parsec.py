@@ -79,61 +79,45 @@ rules = {}
 tokens = {}
 productions = {}
 
-
 def parse_grammar(filename):
+    g = None
     with open(filename, 'r') as f:
-        i = 0
-        for line in f:
+        data=f.read()
+        g = grammar.parse(data)
+        #TODO
+        #validate_ast(g)
+
+    for token in g.tokens():
+        tokens[token.name] = 'string("'+token.value.value+'")'
+
+    for rule in g.rules():
+        construct_rule = ""
+        i=0
+        for prod in rule.productions:
             i+=1
-            parsed = (comment ^ start ^ rule ^ token).parse(line)
+            j=0
+            for part in prod.parts:
+                if j == 0:
+                    construct_rule += '('
+                j+=1
+                if isinstance(part, String):
 
-            if isinstance(parsed, Comment):
-                comments.append((i, parsed.message))
-
-            if isinstance(parsed, Start):
-                start_rule.append(parsed.start_rule)
-
-            if isinstance(parsed, Rule):
-
-                if parsed.name in tokens:
-                    raise NameError("The rule '"+parsed.name+"' is already defined (from row " + str(i)+").")
-                elif parsed.name not in rules:
-                    construct_rule = ""
-                    i=0
-                    for prod in parsed.productions:
-                        i+=1
-                        j=0
-                        for part in prod.parts:
-                            if j == 0:
-                                construct_rule += '('
-                            j+=1
-                            if isinstance(part, String):
-
-                                construct_rule += 'string("'+part.value+'")'
-                            else:
-                                construct_rule += part.name
-
-                            if j < len(prod.parts):
-                                construct_rule += ' + '
-                            if j == len(prod.parts):
-                                construct_rule += ')'
-
-                        if i < len(parsed.productions):
-                            construct_rule += ' ^ '
-
-                    rules[parsed.name] = construct_rule
-
+                    construct_rule += 'string("'+part.value+'")'
                 else:
-                    raise NameError("The rule '"+parsed.name+"' is already defined (from row " + str(i)+").")
+                    construct_rule += part.name
 
-            # if isinstance(parsed, Production):
-                # NOT used???
+                if j < len(prod.parts):
+                    construct_rule += ' + '
+                if j == len(prod.parts):
+                    construct_rule += ')'
 
-            if isinstance(parsed, Token):
-                key = parsed.name
-                if key not in tokens:
-                    tokens[key] = 'string("'+parsed.value.value+'")'
+            if i < len(rule.productions):
+                construct_rule += ' ^ '
 
-                else:
-                    raise NameError("The token '"+key+"' is already defined (from row " + str(i)+").")
+        rules[rule.name] = construct_rule
+
+
+    for start in g.starts():
+        start_rule.append(start.start_rule)
+
 
