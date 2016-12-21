@@ -16,9 +16,10 @@ from parsec.semantic import *
 class SemanticTest(unittest.TestCase):
     """Test the semantic"""
     def test_correct_grammar(self):
-        g1 = Grammar([Comment("this is a comment")])
-        g2 = Grammar([Token("foo", String("bar"))])
+        g1 = Grammar([ Comment("this is a comment"), Start("foo")])
+        g2 = Grammar([ Token("foo", String("bar")), Start("foo")])
         g3 = Grammar([ Token("fun", String("bar"))
+                     , Start("foo")
                      , Rule("foo", [Production([Identifier("fun")])])
                      ])
         g4 = Grammar([ Comment("This is a grammar")

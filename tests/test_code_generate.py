@@ -145,8 +145,6 @@ Y = "*" T | "";
 
     def test_simple_parser(self):
 
-        print("*****************")
-
         grammar = '''
         start = E;
         num = "1";
@@ -166,7 +164,6 @@ Y = "*" T | "";
 
 
 
-        print("*****************")
     def test_multiple_tokens(self):
 
         grammar = '''token plus = "+";
