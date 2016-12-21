@@ -142,6 +142,31 @@ Y = "*" T | "";
         grammar = ''''''
         self.assertRaises(SemanticError, parse_grammar, grammar)
 
+
+    def test_simple_parser(self):
+
+        print("*****************")
+
+        grammar = '''
+        start = E;
+        num = "1";
+        E = T X;
+        T = "(" E ")"| num;
+        X = "+" E | "";
+        '''
+        obj = parse_grammar(grammar)
+        create_func(obj, "code_gen_temp4.py", "my_parser", "generated", False)
+
+        import code_gen_temp4
+
+        parser = code_gen_temp4.my_parser
+
+        self.assertEqual(parser.parse("1+1"), ('1', ('+', ('1', ''))) )
+        self.assertRaises(ParseError, parser.parse, "+1")
+
+
+
+        print("*****************")
     def test_multiple_tokens(self):
 
         grammar = '''token plus = "+";

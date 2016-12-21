@@ -34,8 +34,8 @@ def validate_ast(ast):
     for rule in rules:
         for production in rule.productions:
             for part in production.parts:
-                if isinstance(part, Identifier) and names.count(part.name) == 0:
-                    raise SemanticError("'" + name + "' is not defined")
+                if isinstance(part, Identifier) and part.name not in names:
+                    raise SemanticError("'" + part.name + "' is not defined")
 
 
     return True
