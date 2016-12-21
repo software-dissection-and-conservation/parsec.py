@@ -24,7 +24,6 @@ class CodeGenerationTest(unittest.TestCase):
 
         grammar = '''# this is a comments
 token plus = "+";
-token plus = "*";
 start = E;
 # Grammar;
 num = "1";
@@ -57,6 +56,20 @@ Y = "*" T | "";
 
         grammar_temp.close()
 
+
+    def test_multiple_tokens(self):
+
+        grammar = '''token plus = "+";
+token plus = "*";
+'''
+        grammar_temp = tempfile.NamedTemporaryFile()
+
+        with open(grammar_temp.name, 'w') as f:
+            f.write(grammar)
+
+        #TODO change the exception to the one validate_ast will throw
+        self.assertRaises(NameError, parse_grammar, grammar_temp.name)
+        grammar_temp.close()
 
 if __name__ == "__main__":
     unittest.main()
