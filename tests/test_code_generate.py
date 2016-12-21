@@ -137,39 +137,17 @@ Y = "*" T | "";
         self.assertRaises(SemanticError, parse_grammar, grammar)
 
 
-    def _test_generated_parser_empty(self):
+    def test_generated_parser_empty(self):
 
         grammar = ''''''
-        grammar_temp = tempfile.NamedTemporaryFile()
+        self.assertRaises(SemanticError, parse_grammar, grammar)
 
-        with open(grammar_temp.name, 'w') as f:
-            f.write(grammar)
-
-        obj = parse_grammar(grammar_temp.name)
-        create_func(obj, "code_gen_temp3.py", "my_parser")
-
-        import code_gen_temp3
-
-        parser = code_gen_temp3.my_parser
-
-        self.assertEqual(parser.parse("1+1"), (('1', ''), ('+', (('1', ''), ''))) )
-        self.assertRaises(ParseError, parser.parse, "+1")
-
-        grammar_temp.close()
-
-
-    def _test_multiple_tokens(self):
+    def test_multiple_tokens(self):
 
         grammar = '''token plus = "+";
 token plus = "*";
 '''
-        grammar_temp = tempfile.NamedTemporaryFile()
-
-        with open(grammar_temp.name, 'w') as f:
-            f.write(grammar)
-
-        self.assertRaises(NameError, parse_grammar, grammar_temp.name)
-        grammar_temp.close()
+        self.assertRaises(SemanticError, parse_grammar, grammar)
 
 if __name__ == "__main__":
     unittest.main()
