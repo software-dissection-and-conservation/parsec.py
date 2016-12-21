@@ -155,11 +155,6 @@ Y = "*" T | "";
         self.assertEqual(parser.parse("1+1"), (('1', ''), ('+', (('1', ''), ''))) )
         self.assertRaises(ParseError, parser.parse, "+1")
 
-
-#        parser = code_gen_temp3.generated()
-#        self.assertEqual(parser.parse("1+1"), (('1', ''), ('+', (('1', ''), ''))) )
-#        self.assertRaises(ParseError, parser.parse, "+1")
-
         grammar_temp.close()
 
 
@@ -173,7 +168,6 @@ token plus = "*";
         with open(grammar_temp.name, 'w') as f:
             f.write(grammar)
 
-        #TODO change the exception to the one validate_ast will throw
         self.assertRaises(NameError, parse_grammar, grammar_temp.name)
         grammar_temp.close()
 
