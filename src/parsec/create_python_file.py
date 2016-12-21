@@ -7,8 +7,6 @@ Test the grammar parser
 
 __author__ = "Daniel Edin, Micael Loberg and Tommy Vagbratt"
 
-import unittest
-
 from pprint import pprint
 from parsec.grammar import *
 
@@ -98,7 +96,7 @@ def parse_grammar(filename):
             if isinstance(parsed, Rule):
 
                 if parsed.name in tokens:
-                    print(parsed.name + ": rule / prod same name as a token")
+                    raise NameError("The rule '"+parsed.name+"' is already defined (from row " + str(i)+").")
                 elif parsed.name not in rules:
                     construct_rule = ""
                     i=0
@@ -125,6 +123,8 @@ def parse_grammar(filename):
 
                     rules[parsed.name] = construct_rule
 
+                else:
+                    raise NameError("The rule '"+parsed.name+"' is already defined (from row " + str(i)+").")
 
             # if isinstance(parsed, Production):
                 # NOT used???
@@ -135,16 +135,5 @@ def parse_grammar(filename):
                     tokens[key] = 'string("'+parsed.value.value+'")'
 
                 else:
-                    print(key+" was in tokens")
+                    raise NameError("The token '"+key+"' is already defined (from row " + str(i)+").")
 
-
-class GrammarTest(unittest.TestCase):
-    """Test the grammar parser"""
-
-    def test_generated_parser(self):
-        parse_grammar("../fileparse/kappa2.txt")
-        create_func("kappa.py", "my_parser", "generated", 1)
-
-
-if __name__ == "__main__":
-    unittest.main()
