@@ -7,11 +7,17 @@ class SemanticError(Exception):
         return repr(self.value)
 
 def validate_ast(ast):
-    tokens = ast.tokens();
-    rules = ast.rules();
+    tokens = ast.tokens()
+    rules = ast.rules()
     token_names = list(map(lambda token: token.name, tokens))
     rule_names = list(map(lambda rule: rule.name, rules))
     names = token_names + rule_names
+    start_len =  len(ast.starts())
+
+    if start_len < 1:
+        raise SemanticError("There is no start rule defined")
+    elif start_len > 1:
+        raise SemanticError("There is more than 1 start rule defined")
 
     for name in token_names:
         if token_names.count(name) > 1:
