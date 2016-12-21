@@ -245,7 +245,6 @@ other = b1
 start = foo;
 
 """
-        print(p.parse(test_grammar))
         self.assertEqual(p.parse(test_grammar), Grammar([ Comment("This is a grammar")
                                                         , Comment("Here we define some tokens")
                                                         , Token("a", String("x"))

@@ -28,6 +28,14 @@ class Identifier(Node):
     def __str__(self):
         return self.name
 
+class RegularExpression(Node):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return "r\"{0}\"".format(self.value)
+
+
 class Comment(Node):
     def __init__(self, message):
         self.message = message
@@ -66,8 +74,20 @@ class Rule(Node):
         return "{0} = {1};".format(self.name, " | ".join(map(str,self.productions)))
 
 class Grammar(Node):
-    def __init__(self, d):
-        self.d = d
+    def __init__(self, declarations):
+        self.declarations = declarations
 
     def __str__(self):
-        return "\n".join(map(str, self.d))
+        return "\n".join(map(str, self.declarations))
+
+    def tokens(self):
+        return list(filter(lambda x: isinstance(x, Token), self.declarations))
+
+    def rules(self):
+        return list(filter(lambda x: isinstance(x, Rule), self.declarations))
+
+    def comments(self):
+        return list(filter(lambda x: isinstance(x, Comment), self.declarations))
+
+    def starts(self):
+        return list(filter(lambda x: isinstance(x, Start), self.declarations))
