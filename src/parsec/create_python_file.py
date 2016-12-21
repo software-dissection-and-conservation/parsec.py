@@ -9,6 +9,7 @@ __author__ = "Daniel Edin, Micael Loberg and Tommy Vagbratt"
 
 from pprint import pprint
 from parsec.grammar import *
+from parsec.semantic import *
 
 
 # http://stackoverflow.com/questions/11815503/whats-the-best-way-to-write-python-code-into-a-python-file
@@ -32,7 +33,15 @@ class CodeBlock():
         return result
 
 
-preemble = '''from __future__ import generators
+
+class parse_obj:
+    def __init__(self):
+        self.start_rule = []
+        self.comments = []
+        self.rules = {}
+        self.tokens = {}
+        self.productions = {}
+        self.preemble = '''from __future__ import generators
 import string
 from parsec import *
 
@@ -48,47 +57,52 @@ def line_master(funcname, yielder, hide):
     return CodeBlock(s + funcname + '()', ['ret = yield ('+yielder+')', 'return ret\n'])
 
 
-def create_func(filename, funcname, parsername, hide):
+def create_func(obj, filename, funcname, parsername="generated", hide=True):
 
     funcs = []
 
     with open(filename, 'w') as f:
-                f.write(preemble)
-                for key in tokens:
+                f.write(obj.preemble)
+                for key in obj.tokens:
                     if hide:
-                        funcs.append(line_master(key, tokens[key], hide))
+                        funcs.append(line_master(key, obj.tokens[key], hide))
                     else:
-                        f.write(line_master(key, tokens[key], hide).convert_to_string())
+                        f.write(line_master(key, obj.tokens[key], hide).convert_to_string())
 
-                for key in rules:
+                for key in obj.rules:
                     if hide:
-                        funcs.append(line_master(key, rules[key], hide))
+                        funcs.append(line_master(key, obj.rules[key], hide))
                     else:
-                        f.write(line_master(key, rules[key], hide).convert_to_string())
+                        f.write(line_master(key, obj.rules[key], hide).convert_to_string())
 
                 if hide:
-                    funcs.append(line_master("start", start_rule[0]+' << eof()', hide))
+                    funcs.append(line_master("start", obj.start_rule[0]+' << eof()', hide))
                     funcs.append('return start')
                     f.write(CodeBlock('def ' + parsername + '()', funcs).convert_to_string())
                     f.write('\n\n' + funcname + ' = ' + parsername + '()')
+                else:
+                    f.write(line_master("start", obj.start_rule[0]+' << eof()', hide).convert_to_string())
+                    f.write('\n\n' + funcname + ' = start')
 
 
-start_rule = []
-comments = []
-rules = {}
-tokens = {}
-productions = {}
 
-def parse_grammar(filename):
+def parse_grammar(grammar_data, filename=False):
+
+    obj = parse_obj()
+
     g = None
-    with open(filename, 'r') as f:
-        data=f.read()
-        g = grammar.parse(data)
-        #TODO
-        #validate_ast(g)
+
+    if filename:
+        with open(grammar_data, 'r') as f:
+            data=f.read()
+            g = grammar.parse(data)
+            validate_ast(g)
+    else:
+        g = grammar.parse(grammar_data)
+        validate_ast(g)
 
     for token in g.tokens():
-        tokens[token.name] = 'string("'+token.value.value+'")'
+        obj.tokens[token.name] = 'string("'+token.value.value+'")'
 
     for rule in g.rules():
         construct_rule = ""
@@ -114,10 +128,13 @@ def parse_grammar(filename):
             if i < len(rule.productions):
                 construct_rule += ' ^ '
 
-        rules[rule.name] = construct_rule
+        obj.rules[rule.name] = construct_rule
 
 
     for start in g.starts():
-        start_rule.append(start.start_rule)
+        obj.start_rule.append(start.start_rule)
+
+    return (obj)
+
 
 
